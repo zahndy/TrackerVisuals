@@ -34,7 +34,7 @@ namespace TrackerVisuals
         private static ModConfigurationKey<string> TrackersCsv = new ModConfigurationKey<string>("TrackersCsv", "List of Tracker id's(csv of id's: \"ID1,ID2,ID3\")", () => "");
 
         [AutoRegisterConfigKey]
-        private static ModConfigurationKey<string> CustomModels = new ModConfigurationKey<string>("CustomModels", "CustomModels list (csv of resrecs)", () => ""); 
+        private static ModConfigurationKey<string> CustomModels = new ModConfigurationKey<string>("CustomModels", "CustomModels (csv of resrecs, Inventory path works best eg resrec:///U-user/Inventory/SpawnObjects/Object)", () => ""); 
 
         private static Dictionary<string, TrackedDevicePositioner> trackedDevices = new Dictionary<string, TrackedDevicePositioner>();
 
