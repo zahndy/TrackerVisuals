@@ -19,7 +19,7 @@ namespace TrackerVisuals
         public override String Name => "TrackerVisuals";
         public override String Author => "zahndy";
         public override String Link => "https://github.com/zahndy/TrackerVisuals";
-        public override String Version => "1.0.0";
+        public override String Version => "1.1.0";
 
         public static ModConfiguration config;
 
@@ -29,7 +29,7 @@ namespace TrackerVisuals
         [AutoRegisterConfigKey]
         private static readonly ModConfigurationKey<dummy> DUMMY_ = new ModConfigurationKey<dummy>("dummy_", $"<size=300>Enter Tracker ID's you wish to hide the visual of. " +
             $"\nTo grab the ID you need to have the tracker Turned On and then you can find them in your User Root. " +
-            $"\n models can be replaced with custom ones by putting the resrec in the other field, they will be matched on index</size> ");
+            $"\nModels can be replaced with custom ones by putting the resrec in the other field, they will be matched on index</size> ");
 
         [AutoRegisterConfigKey]
         private static ModConfigurationKey<string> TrackersCsv = new ModConfigurationKey<string>("TrackersCsv", "List of Tracker id's(csv of id's: \"ID1,ID2,ID3\")", () => "");
@@ -43,7 +43,7 @@ namespace TrackerVisuals
         public override void OnEngineInit()
 
         {
-            config = GetConfiguration();
+            config = GetConfiguration()!;
             config.Save(true);
             Harmony harmony = new Harmony("com.zahndy.TrackerVisuals");
             harmony.PatchAll();
@@ -57,7 +57,7 @@ namespace TrackerVisuals
 
                 if (configurationChangedEvent.Key == TrackersCsv)
                 {
-                    string trackercsvStr = config.GetValue(TrackersCsv).Trim(',', ' ');
+                    string trackercsvStr = config.GetValue(TrackersCsv)!.Trim(',', ' ');
                     List<String> trackercsv = trackercsvStr.Split(',').ToList();
                     foreach (KeyValuePair<string, TrackedDevicePositioner> trackedDevice in trackedDevices)
                     {
@@ -68,9 +68,9 @@ namespace TrackerVisuals
                             {
                                 trackedDevicePositioner.ReferenceModel.Target.Destroy();
                                 trackedDevice.Value.ReferenceModel.Target = trackedDevice.Value.Slot.AddSlot("Model");
-                                if (config.GetValue(CustomModels).Length > 0)
+                                if (config.GetValue(CustomModels)!.Length > 0)
                                 {
-                                    List<string> customModels = config.GetValue(CustomModels).Split(',').ToList();
+                                    List<string> customModels = config.GetValue(CustomModels)!.Split(',').ToList();
                                     int trackerIndex = trackercsv.IndexOf(trackedDevice.Key);
                                     if (trackerIndex >= 0 && trackerIndex < customModels.Count)
                                     {
@@ -162,16 +162,16 @@ namespace TrackerVisuals
                     transformStreamDriver.RotationStream.Target = streamOrAdd2;
                     transformStreamDriver.Position.Target = slot.Position_Field;
                     transformStreamDriver.Rotation.Target = slot.Rotation_Field;
-                    List<string> TrackerIDs = config.GetValue(TrackersCsv).Split(',').ToList();
+                    List<string> TrackerIDs = config.GetValue(TrackersCsv)!.Split(',').ToList();
                     if (tracker.DisplayModel != null)
                     {
                         Slot slot2 = slot.AddSlot("Model");
                         if (TrackerIDs.Contains(tracker.PublicID))
                         {
-                            if (config.GetValue(CustomModels).Length > 0)
+                            if (config.GetValue(CustomModels)!.Length > 0)
                             {
-                                List<string> customModels = config.GetValue(CustomModels).Split(',').ToList();
-                                string trackercsvStr = config.GetValue(TrackersCsv).Trim(',', ' ');
+                                List<string> customModels = config.GetValue(CustomModels)!.Split(',').ToList();
+                                string trackercsvStr = config.GetValue(TrackersCsv)!.Trim(',', ' ');
                                 List<String> trackercsv = trackercsvStr.Split(',').ToList();
 
                                 int trackerIndex = trackercsv.IndexOf(tracker.PublicID);
